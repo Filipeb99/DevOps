@@ -1,13 +1,20 @@
-# use a node base image
-FROM node:7-onbuild
+FROM golang:1.21
+# Create working directory under /usr/src/app
+WORKDIR /usr/src/app
+# Copy over all go config (go.mod, go.sum etc.)
+COPY go.* ./
+# Install any required modules
+RUN go mod download && go mod verify
 
-# set maintainer
-LABEL maintainer "filipeborralho"
+# Copy over Go source code
+# COPY . .
 
-# set a health check
-HEALTHCHECK --interval=5s \
-    --timeout=5s \
-    CMD curl -f http://127.0.0.1:8080 || exit 1
+# Copy over Go source code
+COPY *.go ./
 
-# tell docker what port to expose
+# Run the Go build and output binary under /DevOpsDemo
+RUN go build -o /DevOpsDemo
+# Make sure to expose the port the HTTP server is using
 EXPOSE 8080
+# Run the app binary when we run the container
+ENTRYPOINT ["/DevOpsDemo"]
