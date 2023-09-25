@@ -15,6 +15,6 @@ COPY *.go ./
 # Run the Go build and output binary under /DevOpsDemo
 RUN go build -o /DevOpsDemo
 # Make sure to expose the port the HTTP server is using
-EXPOSE 8080
+EXPOSE 8000
 # Run the app binary when we run the container
 ENTRYPOINT ["/DevOpsDemo"]
