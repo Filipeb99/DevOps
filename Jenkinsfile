@@ -8,12 +8,10 @@ pipeline {
             sh 'go mod init mainpkg'
         }
         stage('Build Image') {
-            app = docker.build("Filipeb99/DevOps")
+            docker build -t simple-server .
         }
         stage('Test image') {
-            app.inside {
-                sh 'echo "Tests passed!'
-            }
+            docker run -p 8000:8000 -t simple-server
         }
         stage('Push image') {
             sh 'echo "docker push ..."'
