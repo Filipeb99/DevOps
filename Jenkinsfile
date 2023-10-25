@@ -1,7 +1,7 @@
 pipeline {
 
     environment {
-        dockerimagename = "Filipeb99/go-app"
+        dockerimagename = "filipeb99/go-app"
         dockerImage = ""
     }
     
