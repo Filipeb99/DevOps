@@ -1,17 +1,45 @@
 pipeline {
+
+    environment {
+        dockerimagename = "Filipeb99/go-app"
+        dockerImage = ""
+    }
+    
     agent any
 
-    tools { go 'go1.21' }
-
     stages {
-        stage('Build App') {
+        stage('Checkout Source') {
             steps {
-                sh 'go mod init mainpkg'
+                git 'https://github.com/Bravinsimiyu/jenkins-kubernetes-deployment.git'
             }
         }
-        stage('Build Image') {
+        
+        stage('Build image') {
+            steps{
+                script {
+                    dockerImage = docker.build dockerimagename
+                }
+            }
+        }
+
+        stage('Pushing Image') {
+            environment {
+                registryCredential = 'dockerhub-credentials'
+            }
             steps {
-                sh 'docker build . -t simple-server'
+                script {
+                    docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+                        dockerImage.push("latest")
+                    }
+                }
+            }
+        }
+
+        stage('Deploying Go container to Kubernetes') {
+            steps {
+                script {
+                    kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
+                }
             }
         }
     }
