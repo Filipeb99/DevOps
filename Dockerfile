@@ -7,6 +7,9 @@ LABEL maintainer="Filipeb99"
 # Set current working directory inside the container
 WORKDIR /app
 
+# Initialise module to track code dependencies
+RUN go mod init mainModule
+
 # Copy over all go config (go.mod, go.sum etc.)
 COPY go.* ./
 
