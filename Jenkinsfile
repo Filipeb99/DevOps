@@ -39,6 +39,7 @@ pipeline {
             steps {
                 sh 'kubectl apply -f kubernetes.yaml'
                 sh 'kubectl get services'
+                sh 'minikube service go-app-service --url'
             }
         }
     }
