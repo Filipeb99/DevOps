@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: go-app                         # The name of the go application container
-        image: Filipeb99/go-app:latest       # The docker image for building the go application container
+        image: filipeb99/go-app:latest       # The docker image for building the go application container
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000                # The port for the go application container
