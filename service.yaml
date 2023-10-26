@@ -6,7 +6,7 @@ spec:
   selector:
     app: go-app 
   type: NodePort                 # A port is opened on each node in your cluster via Kube proxy.
-  ports:                         # Take incoming HTTP requests on port 9090 and forward them to the targetPort of 8080
+  ports:                         # Take incoming HTTP requests on port 9000 and forward them to the targetPort of 8000
   - name: http
     port: 9000
     targetPort: 8000
