@@ -1,9 +1,10 @@
+---
 apiVersion: apps/v1
 kind: Deployment                             # Type of Kubernetes resource
 metadata:
   name: go-app                               # Name of the Kubernetes resource to be created in the Kubernetes cluster
 spec:
-  replicas: 2                                # Number of pods to run at any given time in the Kubernetes cluster
+  replicas: 3                                # Number of pods to run at any given time in the Kubernetes cluster
   selector:
     matchLabels:
       app: go-app                            # This deployment applies to any Pods matching the specified label
@@ -15,11 +16,10 @@ spec:
       containers:
       - name: go-app                         # The name of the go application container
         image: Filipeb99/go-app:latest       # The docker image for building the go application container
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000                # The port for the go application container
-
-#ports:
-#  - containerPort: 8000
+        
 #livenessProbe:           # To check the health of the Pod
 #  httpGet:
 #    path: /health
@@ -41,11 +41,11 @@ apiVersion: v1
 kind: Service                    # Type of kubernetes resource
 metadata:
   name: go-app-service           # The name of the Kubernetes Service to be created in the Kubernetes cluster
-spec:
-  selector:
-    app: go-app 
+spec: 
   type: NodePort                 # A port is opened on each node in your cluster via Kube proxy.
   ports:                         # Take incoming HTTP requests on port 9000 and forward them to the targetPort of 8000
   - name: http
     port: 9000
     targetPort: 8000
+  selector:
+    app: go-app
