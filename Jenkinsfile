@@ -38,7 +38,6 @@ pipeline {
         stage('Deploying Go container to Kubernetes') {
             steps {
                 sh 'kubectl apply -f kubernetes.yaml'
-                sh 'curl http://127.0.0.1:65345'
                 sh 'minikube service go-app-service --url'
             }
         }
