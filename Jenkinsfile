@@ -37,7 +37,7 @@ pipeline {
 
         stage('Deploying Go container to Kubernetes') {
             steps {
-                kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
+                sh 'kubectl apply -f kubernetes.yaml'
             }
         }
     }
