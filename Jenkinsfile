@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-                git 'https://github.com/Filipeb99/go-kubernetes.git'
+                git 'https://github.com/Filipeb99/DevOps.git'
             }
         }
 
