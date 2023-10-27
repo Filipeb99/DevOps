@@ -7,23 +7,20 @@ import (
 	"strconv"
 )
 
-func formHandler(wtr http.ResponseWriter, req *http.Request) {
-	if req.URL.Path != "/form" {
-		http.Error(wtr, "404 not found", http.StatusNotFound)
-		return
+func handler(wtr http.ResponseWriter, req *http.Request) {
+	query := r.URL.Query()
+	name := query.Get("name")
+	key := query.Get("key")
+	
+	if name == "" {
+		name = "Guest"
 	}
 
-	err := req.ParseForm()
-
-	if err != nil {
-		fmt.Fprintf(wtr, "ParseForm() error: %v", err)
-		return
+	if key == "" {
+		key = "0"
 	}
-
-	fmt.Fprintf(wtr, "POST request successful\n\n")
-
-	name := req.FormValue("name")
-	key, err := strconv.Atoi(req.FormValue("key"))
+	
+	offset, err := strconv.Atoi(key)
 
 	if err != nil {
 		fmt.Fprintf(wtr, "Failed to convert key to int!\n%v", err)
@@ -31,24 +28,24 @@ func formHandler(wtr http.ResponseWriter, req *http.Request) {
 	}
 
 	fmt.Fprintf(wtr, "Name : %s\n", name)
-	fmt.Fprintf(wtr, "Key : %d\n\n", key)
+	fmt.Fprintf(wtr, "Key : %d\n\n", offset)
 
-	key %= 26
+	offset %= 26
 
 	runes := []rune(name)
-	offset, maxSize := rune(key), rune(26)
+	shift, maxSize := rune(offset), rune(26)
 
 	for index, char := range runes {
 
-		if char >= 'a'+offset && char <= 'z' ||
-			char >= 'A'+offset && char <= 'Z' {
+		if char >= 'a'+shift && char <= 'z' ||
+			char >= 'A'+shift && char <= 'Z' {
 
-			char -= offset
+			char -= shift
 
-		} else if char >= 'a' && char < 'a'+offset ||
-			char >= 'A' && char < 'A'+offset {
+		} else if char >= 'a' && char < 'a'+shift ||
+			char >= 'A' && char < 'A'+shift {
 
-			char += (maxSize - offset)
+			char += (maxSize - shift)
 
 		}
 
@@ -59,16 +56,6 @@ func formHandler(wtr http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	fileServer := http.FileServer(http.Dir("."))
-
-	http.Handle("/", fileServer)
-	http.HandleFunc("/form", formHandler)
-
-	fmt.Println("Starting server at port 8000")
-
-	err := http.ListenAndServe(":8000", nil)
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":8000", nil))
 }
