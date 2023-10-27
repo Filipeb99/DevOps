@@ -14,7 +14,7 @@ pipeline {
                 sh '''#!/bin/bash
 
                     if ! [ -f "go.mod" ]; then
-                        go mod init go-kubernetes
+                        go mod init devops
                     fi
                 '''
             }
@@ -22,13 +22,13 @@ pipeline {
         
         stage('Build Image') {
             steps{
-                sh 'docker build -t go-kubernetes .'
+                sh 'docker build -t devops .'
             }
         }
 
         stage('Tag Image') {
             steps{
-                sh 'docker tag go-kubernetes filipeb99/go-hello-world:latest'
+                sh 'docker tag devops filipeb99/go-app:latest'
             }
         }
 
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-                        sh 'docker push filipeb99/go-hello-world:latest'
+                        sh 'docker push filipeb99/go-app:latest'
                     }
                 }
             }
