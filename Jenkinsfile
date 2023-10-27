@@ -12,8 +12,8 @@ pipeline {
         stage('Create Module') {
             steps {
                 sh '''#!/bin/bash
-                    if [ ! test -f go.mod ]
-                    then
+
+                    if ! [ -f "go.mod" ]; then
                         go mod init go-kubernetes
                     fi
                 '''
