@@ -8,7 +8,7 @@ import (
 )
 
 func handler(wtr http.ResponseWriter, req *http.Request) {
-	query := r.URL.Query()
+	query := req.URL.Query()
 	name := query.Get("name")
 	key := query.Get("key")
 	
