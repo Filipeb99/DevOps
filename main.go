@@ -26,9 +26,9 @@ func handler(wtr http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(wtr, "Failed to convert key to int!\n%v", err)
 		return
 	}
-
-	fmt.Fprintf(wtr, "Name : %s\n", name)
-	fmt.Fprintf(wtr, "Key : %d\n\n", offset)
+	
+	wtr.Write([]byte(fmt.Sprintf("Name : %s\n", name)))
+	wtr.Write([]byte(fmt.Sprintf("Key : %d\n\n", offset)))
 
 	offset %= 26
 
@@ -51,8 +51,8 @@ func handler(wtr http.ResponseWriter, req *http.Request) {
 
 		runes[index] = char
 	}
-
-	fmt.Fprintf(wtr, "Encrypted name : %s\n", string(runes))
+	
+	wtr.Write([]byte(fmt.Sprintf("Encrypted name : %s\n", string(runes))))
 }
 
 func main() {
