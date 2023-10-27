@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment                                # Type of Kubernetes resource
 metadata:
-  name: go-hello-world                          # Name of the Kubernetes resource to be created in the Kubernetes cluster
+  name: go-app                                  # Name of the Kubernetes resource to be created in the Kubernetes cluster
 spec:
   replicas: 3                                   # Number of pods to run at any given time in the Kubernetes cluster
   selector:
     matchLabels:
-      app: go-hello-world                       # This deployment applies to any Pods matching the specified label
+      app: go-app                               # This deployment applies to any Pods matching the specified label
   template:
     metadata:
       labels:                                   # The labels that will be applied to all pods in this deployment
-        app: go-hello-world
+        app: go-app
     spec:
       containers:
-      - name: go-hello-world                    # The name of the go application container
-        image: filipeb99/go-hello-world:latest   # The docker image for building the go application container
+      - name: go-app                             # The name of the go application container
+        image: filipeb99/go-app:latest           # The docker image for building the go application container
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000                   # The port for the go application container
@@ -40,7 +40,7 @@ spec:
 apiVersion: v1
 kind: Service                   # Type of kubernetes resource
 metadata:
-  name: go-hello-world-service  # The name of the Kubernetes Service to be created in the Kubernetes cluster
+  name: go-app-service          # The name of the Kubernetes Service to be created in the Kubernetes cluster
 spec:
   type: NodePort                # A port is opened on each node in your cluster via Kube proxy.
   ports:                        # Take incoming HTTP requests on port 9000 and forward them to the targetPort of 8000
@@ -48,4 +48,4 @@ spec:
     port: 9000
     targetPort: 8000
   selector:
-    app: go-hello-world         # Map any pod with label `app=go-hello-world` to this service
+    app: go-app                 # Map any pod with label `app=go-hello-world` to this service
