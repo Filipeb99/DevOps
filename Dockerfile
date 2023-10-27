@@ -7,21 +7,17 @@ LABEL maintainer="Filipeb99"
 # Set current working directory inside the container
 WORKDIR /app
 
-# Initialise module to track code dependencies
-RUN go mod init mainModule
-
-# Copy over all go config (go.mod, go.sum etc.)
+# Copy over go config (go.mod, go.sum etc.)
 COPY go.* ./
 
 # Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
-RUN go mod download && go mod verify
+RUN go mod download
 
 # Copy the source from current directory to working directory inside the container
 COPY . .
 
 # Build the Go app
-# RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
-RUN go build -o main
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
 # Start new stage from scratch
 FROM alpine:latest  
